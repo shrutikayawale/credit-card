@@ -24,4 +24,4 @@ const isValidLuhn = cardNum => {
   return sum % 10 === 0;
 };
 
-module.exports = { isValidLuhn };
+module.exports = { isValidLuhn, addDigits };
