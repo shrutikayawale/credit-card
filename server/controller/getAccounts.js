@@ -17,7 +17,7 @@ const getAccounts = async (request, response) => {
               id: account._id,
               name: account.name,
               cardNumber: account.cardNumber,
-              limit: account.limit,
+              limit: `£ ${account.limit}`,
               balance: `£ ${account.balance}`
             })); 
 

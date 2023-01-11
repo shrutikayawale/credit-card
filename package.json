@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "cd server && node index.js",
+    "client": "cd client && npm run start",
+    "dev": "concurrently -n 'server,client' \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/shrutikayawale/credit-card/issues"
   },
-  "homepage": "https://github.com/shrutikayawale/credit-card#readme"
+  "homepage": "https://github.com/shrutikayawale/credit-card#readme",
+  "dependencies": {
+    "concurrently": "^7.6.0",
+    "cors": "^2.8.5"
+  }
 }
