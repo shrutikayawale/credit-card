@@ -40,8 +40,7 @@ const addAccount = async (request, response) => {
                 status: 422,
                 message: `Request is not correct. Name, card number and limit are required Or Card number should not be greater than 19 or limit should not be 0`
             });
-        }
-        if (error.code === 11000) {
+        } else if (error.code === 11000) {
             response.status(409).send({
                 status: 409,
                 message: `Card number already exists.`
