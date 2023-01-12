@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 
-export const AddCardComponent = () => {
+/** AddCardComponent is responsible for dislaying Add Card UI and handling API request/error handling */
+export const AddCardComponent = (props) => {
     const [isDisabled, setIsDisabled] = useState(true);
     const [name, setName] = useState('');
     const [cardNumber, setCardNumber] = useState('');
     const [limit, setLimit] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         if (name && cardNumber && limit) {
@@ -26,18 +28,39 @@ export const AddCardComponent = () => {
         setLimit(event.target.value);
     };
 
-    const addButtonHandler = async () => {
-        
-        const response = await axios.post('/v1/accounts', {
-            "name" : name,
-            "limit": limit,
-            "cardNumber": cardNumber
-        });
+    const clearSuccessMessage = (message) => {
+        setSuccessMessage(message);
+        props.fetchAccounts(); //update the accounts on UI
+        setName('');
+        setCardNumber('');
+        setLimit('');
+        setTimeout(() => {
+          setSuccessMessage('');
+        }, 3000);        
+    };
 
-        if (response.status === 200 && response?.data?.accounts) {
-          alert('Data added');
-        } else {
-            setErrorMessage(response?.data?.message);
+    const clearErrorMessage = (message) => {
+        setErrorMessage(message);
+        setTimeout(() => {
+            setErrorMessage('');
+        }, 3000);        
+    };
+
+    const addButtonHandler = async () => {        
+        try {
+            const response = await axios.post('/v1/accounts', {
+                "name" : name,
+                "limit": limit,
+                "cardNumber": cardNumber
+            });
+    
+            if (response.status === 201) {
+              clearSuccessMessage(response?.data?.message);              
+            } else {
+                clearErrorMessage(response?.data?.message);                
+            }
+        } catch (error) {
+            clearErrorMessage(error?.response?.data?.message);                      
         }
     };
 
@@ -54,12 +77,13 @@ export const AddCardComponent = () => {
         </label>
         <label>
            <p>Limit</p>
-           <input type="text" value={limit} onChange={onLimitChangeHandler} style={{ width: '300px', height: '30px'}} name="limit" />
+           <input type="number" value={limit} onChange={onLimitChangeHandler} style={{ width: '300px', height: '30px'}} name="limit" />
         </label> 
         </div> 
 
         <button style={{ marginLeft: '2px', marginTop: '10px'}} onClick={addButtonHandler} disabled={isDisabled}>Add</button> 
 
-        {errorMessage && <p style={{ marginLeft: '2px', marginTop: '10px', color: 'red'}}>{errorMessage}</p>}      
+        {errorMessage && <p style={{ marginLeft: '2px', marginTop: '10px', color: 'red'}}>{errorMessage}</p>} 
+        {successMessage && <p style={{ marginLeft: '2px', marginTop: '10px', color: 'green'}}>{successMessage}</p>}      
     </div>
 };

@@ -1,20 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
 import '../App.css';
 
-export const ExistingCardsComponent = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [data, setData] = useState([]);
+/** ExistingCardsComponent will get all accounts details in props and display in tabular format */
 
-    useEffect(() => {
-        (async () => {
-          const response = await axios('/v1/accounts');
-          if (response.status === 200 && response?.data?.accounts) {
-            setData(response.data.accounts);
-            setIsLoading(false);
-          } 
-        })();
-    }, []);
+export const ExistingCardsComponent = props => {
+    const { isLoading, data } = props;   
 
     const tableData = <table>
         <thead>

@@ -1,5 +1,5 @@
-const { getDataFromCache, setDataInCache } = require('../helpers/cache');
-const Model = require('../model/model');
+const { getDataFromCache } = require('../helpers/cache');
+const { fetchAccountsAndUpdateCache } = require('../helpers/queries');
 
 const getAccounts = async (request, response) => {
     try {
@@ -12,24 +12,15 @@ const getAccounts = async (request, response) => {
                 accounts: parsedCacheResults,
             });
         } else {
-            const data = await Model.find();
-            const accounts = data.map(account => ({
-              id: account._id,
-              name: account.name,
-              cardNumber: account.cardNumber,
-              limit: `£ ${account.limit}`,
-              balance: `£ ${account.balance}`
-            })); 
+            const accounts = await fetchAccountsAndUpdateCache();   
 
-            await setDataInCache(JSON.stringify(accounts), 60); //save data in cache for 60 sec (expiry time)
-
-            response.send({
+            response.status(200).send({
                 status: 200,
-                accounts: accounts
+                accounts: accounts                  
             });
         }        
     } catch (error) {
-        response.send({
+        response.status(400).send({
             status: 400,
             message: "Something went wrong. Please try again.",
             error: error

@@ -3,15 +3,19 @@ const mongoose = require('mongoose');
 const accountSchema = new mongoose.Schema({
     name: {
         required: true,
-        type: String
+        type: String,
+        required: true,
     },
     cardNumber: {
         required: true,
-        type: String
+        type: String,
+        required: true,
+        unique: true,
     },
     limit: {
         required: true,
-        type: Number,        
+        type: Number,
+        required: true,    
     },
     balance: {
         required: false,

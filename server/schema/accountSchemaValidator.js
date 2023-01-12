@@ -7,7 +7,6 @@ const accountDataSchema = Joi.object({
 });
 
 const accountSchemaValidator = async (data) => {
-  console.log(data);
   try {
     const value = await accountDataSchema.validateAsync(data);
     return value;
